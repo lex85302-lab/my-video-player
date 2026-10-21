@@ -18,6 +18,8 @@ h2 {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     margin-bottom: 15px;
     display: inline-block;
+    width: 90%;
+    max-width: 400px;
 }
 
 #clearBtn {
@@ -38,13 +40,15 @@ video {
     margin-bottom: 10px;
 }
 
-/* ခလုတ်တွေ အတွက် Design */
 .nav-controls {
     display: flex;
-    flex-wrap: wrap; /* နေရာမဆံ့ရင် အောက်ကို ဆင်းသွားစေရန် */
+    flex-wrap: wrap; 
     justify-content: center;
-    gap: 5px; /* ခလုတ်တွေ ကြားထဲက အကွာအဝေး */
+    gap: 5px; 
     margin-bottom: 20px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .nav-controls button {
@@ -53,7 +57,7 @@ video {
     padding: 8px 10px;
     border: none;
     border-radius: 8px;
-    font-size: 13px; /* စာလုံးအရွယ်ကို နည်းနည်းလျှော့ထားတယ် */
+    font-size: 13px; 
     cursor: pointer;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     flex: 1;
@@ -64,10 +68,9 @@ video {
     background-color: #0056b3;
 }
 
-/* PiP ခလုတ်ကို အရောင်ခွဲခြားထားမယ် */
 #pipBtn {
     background-color: #28a745;
-    flex-basis: 100%; /* PiP ခလုတ်ကို အောက်တစ်ကြောင်း တစ်ခုတည်း ထားမယ် */
+    flex-basis: 100%;
     margin-top: 5px;
 }
 #pipBtn:hover {
@@ -80,6 +83,8 @@ video {
     padding: 15px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     text-align: left;
+    max-width: 500px;
+    margin: 0 auto;
 }
 
 .playlist-container h3 {
@@ -116,7 +121,7 @@ video {
     border-bottom: none;
 }
 
-/* --- Dark Mode အတွက် Design --- */
+/* --- Dark Mode --- */
 body.dark-mode {
     background-color: #121212;
     color: white;
