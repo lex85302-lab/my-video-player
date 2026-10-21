@@ -7,6 +7,7 @@
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#007bff">
+    <!-- Icon ပုံအသစ် -->
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2933/2933245.png">
 </head>
 <body>
@@ -17,19 +18,16 @@
 
     <h2>ကျွန်တော့် ကိုယ်ပိုင် Video Player</h2>
     
-    <!-- Video ရွေးတဲ့ ခလုတ် -->
     <div class="controls">
         <input type="file" id="videoFile" accept="video/*" multiple>
         <button id="clearBtn">🗑️ စာရင်းရှင်းမယ်</button>
     </div>
 
-    <!-- စာတန်းထိုး တင်ဖို့ ခလုတ် (ဒါလေး လွတ်ကျန်ခဲ့တာပါ) -->
     <div class="controls" style="margin-top: 10px;">
         <input type="file" id="subtitleFile" accept=".srt,.vtt">
         <span style="font-size: 12px; color: #666; display: block; margin-top: 5px;">(စာတန်းထိုး .srt / .vtt ဖိုင် ရွေးပါ)</span>
     </div>
 
-    <!-- အသံအမြန်နှုန်း -->
     <div class="controls" style="margin-top: 10px;">
         အသံအမြန်နှုန်း: 
         <select id="speedControl">
@@ -40,7 +38,6 @@
         </select>
     </div>
 
-    <!-- Video ပြမယ့်နေရာ (crossorigin ကို ဖြုတ်ထားပါတယ်) -->
     <video id="myPlayer" width="100%" controls>
         <track kind="subtitles" id="videoSubtitle" label="Subtitle" srclang="mm" default>
         သင့်ဖုန်းက Browser က Video ကို မပံ့ပိုးနိုင်ပါဘူး။
@@ -51,7 +48,10 @@
         <button id="prevBtn">⏮ နောက်ပြန်</button>
         <button id="nextBtn">ရှေ့သွား ⏭</button>
         <button id="forwardBtn">10s ⏩</button>
-        <button id="pipBtn">🪟 PiP</button>
+        
+        <!-- ခလုတ်အသစ်များ -->
+        <button id="fullscreenBtn" style="background-color: #6f42c1;">⛶ Full Screen</button>
+        <button id="pipBtn" style="background-color: #28a745;">🪟 PiP</button>
     </div>
 
     <div class="playlist-container">
