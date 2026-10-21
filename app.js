@@ -10,12 +10,15 @@ const forwardBtn = document.getElementById('forwardBtn');
 const clearBtn = document.getElementById('clearBtn');
 const pipBtn = document.getElementById('pipBtn');
 const subtitleFileInput = document.getElementById('subtitleFile');
-const fullscreenBtn = document.getElementById('fullscreenBtn'); // အသစ်
+const fullscreenBtn = document.getElementById('fullscreenBtn');
 
 let videoURLs = []; 
 let videoFiles = [];
 let currentVideoIndex = 0; 
 let wakeLock = null; 
+
+// မျက်နှာပြင် နှစ်ချက်နှိပ်တာကို ဖတ်ဖို့ အချိန်မှတ်တဲ့ ကုဒ်
+let lastTap = 0;
 
 videoFileInput.addEventListener('change', function(event) {
     const files = event.target.files; 
@@ -124,12 +127,43 @@ function playVideoByIndex(index) {
     }
 }
 
-// 🔥 Fullscreen ခလုတ် အလုပ်လုပ်ပုံ 🔥
+// 🔥 မျက်နှာပြင် နှစ်ချက်နှိပ်ရင် ရှေ့/နောက် ရွှေ့တဲ့ စနစ် 🔥
+myPlayer.addEventListener('click', function(e) {
+    const currentTime = new Date().getTime();
+    const tapLength = currentTime - lastTap;
+    
+    // နှစ်ချက်နှိပ်တာ ဟုတ်/မဟုတ် စစ်ဆေးခြင်း (၃၀၀ မီလီစက္ကန့်အတွင်း နှိပ်ရမယ်)
+    if (tapLength < 300 && tapLength > 0) {
+        // နှိပ်လိုက်တဲ့ နေရာကို ရှာမယ်
+        const rect = myPlayer.getBoundingClientRect();
+        const x = e.clientX - rect.left; // Video ရဲ့ ဘယ်ဘက်ကနေ အကွာအဝေး
+        
+        // Video ရဲ့ ဘယ်ဘက်တစ်ဝက်လား၊ ညာဘက်တစ်ဝက်လား ခွဲခြားမယ်
+        if (x < rect.width / 2) {
+            // ဘယ်ဘက်ဆိုရင် ၁၀ စက္ကန့် နောက်ပြန်
+            myPlayer.currentTime = Math.max(0, myPlayer.currentTime - 10);
+        } else {
+            // ညာဘက်ဆိုရင် ၁၀ စက္ကန့် ရှေ့သွား
+            myPlayer.currentTime = Math.min(myPlayer.duration, myPlayer.currentTime + 10);
+        }
+        // နှစ်ချက်နှိပ်ပြီးရင် အချိန်ကို ပြန်စမယ်
+        lastTap = 0; 
+    } else {
+        // တစ်ချက်ပဲ နှိပ်တယ်ဆိုရင် Play/Pause လုပ်မယ်
+        if (myPlayer.paused) {
+            myPlayer.play();
+        } else {
+            myPlayer.pause();
+        }
+        lastTap = currentTime;
+    }
+});
+
 fullscreenBtn.addEventListener('click', function() {
     if (!document.fullscreenElement) {
         if (myPlayer.requestFullscreen) {
             myPlayer.requestFullscreen();
-        } else if (myPlayer.webkitRequestFullscreen) { /* Safari အတွက် */
+        } else if (myPlayer.webkitRequestFullscreen) { 
             myPlayer.webkitRequestFullscreen();
         }
     } else {
@@ -166,14 +200,6 @@ pipBtn.addEventListener('click', async function() {
         }
     } catch (error) {
         alert("သင့်ဖုန်းရဲ့ Browser က PiP ကို မပံ့ပိုးထားပါဘူး။");
-    }
-});
-
-myPlayer.addEventListener('click', function() {
-    if (myPlayer.paused) {
-        myPlayer.play();
-    } else {
-        myPlayer.pause();
     }
 });
 
