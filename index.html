@@ -1,71 +1,169 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>My Video Player</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#007bff">
-    <!-- Icon ပုံအသစ် -->
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2933/2933245.png">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3233/3233053.png">
 </head>
-<body>
+<body class="theme-dark">
+    <!-- Header -->
+    <header id="mainHeader">
+        <div class="header-title">My Player</div>
+        <div class="header-actions">
+            <button id="openLibraryBtn" title="Library">📁</button>
+            <button id="openSettingsBtn" title="Settings">⚙️</button>
+        </div>
+    </header>
 
-    <div style="text-align: right; padding-right: 15px; margin-bottom: 10px;">
-        <button id="themeToggle" style="padding: 8px 15px; border-radius: 20px; border: none; background: #333; color: white; cursor: pointer;">🌙 Dark Mode</button>
-    </div>
-
-    <h2>ကျွန်တော့် ကိုယ်ပိုင် Video Player</h2>
-    
-    <div class="controls">
-        <input type="file" id="videoFile" accept="video/*" multiple>
-        <button id="clearBtn">🗑️ စာရင်းရှင်းမယ်</button>
-    </div>
-
-    <div class="controls" style="margin-top: 10px;">
-        <input type="file" id="subtitleFile" accept=".srt,.vtt">
-        <span style="font-size: 12px; color: #666; display: block; margin-top: 5px;">(စာတန်းထိုး .srt / .vtt ဖိုင် ရွေးပါ)</span>
-    </div>
-
-    <div class="controls" style="margin-top: 10px;">
-        အသံအမြန်နှုန်း: 
-        <select id="speedControl">
-            <option value="0.5">0.5x</option>
-            <option value="1" selected>1x (Normal)</option>
-            <option value="1.5">1.5x</option>
-            <option value="2">2x</option>
-        </select>
-    </div>
-
-    <video id="myPlayer" width="100%" controls>
-        <track kind="subtitles" id="videoSubtitle" label="Subtitle" srclang="mm" default>
-        သင့်ဖုန်းက Browser က Video ကို မပံ့ပိုးနိုင်ပါဘူး။
-    </video>
-
-    <div class="nav-controls">
-        <button id="rewindBtn">⏪ 10s</button>
-        <button id="prevBtn">⏮ နောက်ပြန်</button>
-        <button id="nextBtn">ရှေ့သွား ⏭</button>
-        <button id="forwardBtn">10s ⏩</button>
+    <!-- Video Player Area -->
+    <div id="playerContainer">
+        <video id="myPlayer" playsinline></video>
         
-        <!-- ခလုတ်အသစ်များ -->
-        <button id="fullscreenBtn" style="background-color: #6f42c1;">⛶ Full Screen</button>
-        <button id="pipBtn" style="background-color: #28a745;">🪟 PiP</button>
+        <!-- Lock Icon Overlay -->
+        <div id="lockOverlay" class="hidden">
+            <span>🔒 Screen Locked<br><small>Tap to unlock</small></span>
+        </div>
+
+        <!-- Player Controls Overlay -->
+        <div id="controlsOverlay" class="visible">
+            <!-- Top Bar -->
+            <div class="controls-top">
+                <span id="currentVideoTitle">No Video Selected</span>
+                <button id="lockBtn">🔓</button>
+            </div>
+
+            <!-- Center Bar -->
+            <div class="controls-center">
+                <button id="prevBtn" class="control-btn">⏮</button>
+                <button id="rewindBtn" class="control-btn">🔙 10s</button>
+                <button id="playPauseBtn" class="control-btn play-btn">▶️</button>
+                <button id="forwardBtn" class="control-btn">10s 🔜</button>
+                <button id="nextBtn" class="control-btn">⏭</button>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="controls-bottom">
+                <span id="currentTime">00:00</span>
+                <input type="range" id="seekBar" value="0" min="0" max="100">
+                <span id="duration">00:00</span>
+                <button id="fullscreenBtn" class="control-btn">⛶</button>
+            </div>
+        </div>
     </div>
 
-    <div class="playlist-container">
-        <h3>Video စာရင်း</h3>
-        <ul id="playlist"></ul>
+    <!-- Library Modal -->
+    <div id="libraryModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📚 Library</h3>
+                <button class="close-modal-btn" data-target="libraryModal">✖</button>
+            </div>
+            
+            <div class="library-controls">
+                <select id="folderSelect"></select>
+                <button id="addFolderBtn" class="primary-btn">+ Folder</button>
+            </div>
+            
+            <ul id="playlist" class="playlist"></ul>
+            
+            <button id="selectVideoBtn" class="primary-btn wide-btn">📂 Select Video</button>
+        </div>
     </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>⚙️ Settings</h3>
+                <button class="close-modal-btn" data-target="settingsModal">✖</button>
+            </div>
+
+            <!-- Appearance Settings -->
+            <div class="setting-section">
+                <h4>Appearance</h4>
+                <div class="setting-row">
+                    <label>Theme</label>
+                    <select id="themeSelect">
+                        <option value="theme-dark">Dark</option>
+                        <option value="theme-light">Light</option>
+                        <option value="theme-oled">OLED</option>
+                    </select>
+                </div>
+                <div class="setting-row">
+                    <label>Aspect Ratio</label>
+                    <select id="aspectSelect">
+                        <option value="contain">Fit</option>
+                        <option value="cover">Fill</option>
+                        <option value="fill">Stretch</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Playback Settings -->
+            <div class="setting-section">
+                <h4>Playback</h4>
+                <div class="setting-row">
+                    <label>Speed</label>
+                    <select id="speedSelect">
+                        <option value="0.5">0.5x</option>
+                        <option value="0.75">0.75x</option>
+                        <option value="1" selected>1x</option>
+                        <option value="1.25">1.25x</option>
+                        <option value="1.5">1.5x</option>
+                        <option value="2">2x</option>
+                    </select>
+                </div>
+                <div class="setting-row">
+                    <label>Sleep Timer</label>
+                    <select id="sleepTimerSelect">
+                        <option value="0">Off</option>
+                        <option value="15">15 min</option>
+                        <option value="30">30 min</option>
+                        <option value="60">60 min</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Subtitle Settings -->
+            <div class="setting-section">
+                <h4>Subtitles</h4>
+                <div class="setting-row">
+                    <button id="loadSubtitleBtn" class="primary-btn">📥 Load Subtitle (.srt/.vtt)</button>
+                </div>
+                <div class="setting-row">
+                    <label>Size</label>
+                    <input type="range" id="subSize" min="12" max="40" value="20">
+                </div>
+                <div class="setting-row">
+                    <label>Color</label>
+                    <input type="color" id="subColor" value="#ffffff">
+                </div>
+                <div class="setting-row">
+                    <label>Background</label>
+                    <input type="color" id="subBg" value="#000000">
+                </div>
+            </div>
+
+            <!-- Utilities -->
+            <div class="setting-section">
+                <h4>Utilities</h4>
+                <div class="setting-row">
+                    <button id="pipBtn" class="primary-btn">🎬 PiP Mode</button>
+                </div>
+                <div class="setting-row">
+                    <button id="clearHistoryBtn" class="danger-btn">🗑 Clear History</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden Inputs -->
+    <input type="file" id="videoFile" accept="video/*" multiple hidden>
+    <input type="file" id="subtitleFile" accept=".srt,.vtt" hidden>
 
     <script src="app.js"></script>
-    
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-            .then(function() { console.log('Service Worker Registered'); });
-        }
-    </script>
 </body>
 </html>
