@@ -156,3 +156,11 @@ body.dark-mode .nav-controls button {
 body.dark-mode .nav-controls button:hover {
     background-color: #666;
 }
+/* စာတန်းထိုး (Subtitles) အတွက် Design */
+video::cue {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: yellow;
+    font-size: 18px;
+    font-family: sans-serif;
+    font-weight: bold;
+}
