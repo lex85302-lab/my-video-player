@@ -8,11 +8,14 @@ const nextBtn = document.getElementById('nextBtn');
 const rewindBtn = document.getElementById('rewindBtn');
 const forwardBtn = document.getElementById('forwardBtn');
 const clearBtn = document.getElementById('clearBtn');
-const pipBtn = document.getElementById('pipBtn'); // PiP ခလုတ်အသစ်
+const pipBtn = document.getElementById('pipBtn');
+const subtitleFileInput = document.getElementById('subtitleFile');
+const videoSubtitle = document.getElementById('videoSubtitle');
 
 let videoURLs = []; 
 let currentVideoIndex = 0; 
 
+// Video ရွေးတဲ့ ကုဒ် (အရင်အတိုင်း)
 videoFileInput.addEventListener('change', function(event) {
     const files = event.target.files; 
     playlist.innerHTML = ''; 
@@ -37,6 +40,30 @@ videoFileInput.addEventListener('change', function(event) {
     }
 });
 
+// စာတန်းထိုး ဖိုင်ရွေးတဲ့ ကုဒ်
+subtitleFileInput.addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            let content = e.target.result;
+            
+            // SRT ဖိုင်ကို VTT အဖြစ် ပြောင်းလဲခြင်း (Browser တွေက VTT ကိုပဲ ဖတ်နိုင်လို့ပါ)
+            if (file.name.endsWith('.srt')) {
+                content = content.replace(/\r/g, '').replace(/(\d{2}:\d{2}:\d{2}),(\d{3})/g, '$1.$2');
+                content = "WEBVTT\n\n" + content;
+            }
+
+            const blob = new Blob([content], { type: 'text/vtt' });
+            const url = URL.createObjectURL(blob);
+            
+            videoSubtitle.src = url;
+            videoSubtitle.track.mode = 'showing'; // စာတန်းထိုးကို အလိုအလျောက် ဖွင့်ပြမယ်
+        };
+        reader.readAsText(file);
+    }
+});
+
 function playVideoByIndex(index) {
     if (index >= 0 && index < videoURLs.length) {
         currentVideoIndex = index; 
@@ -56,22 +83,18 @@ function playVideoByIndex(index) {
     }
 }
 
-// PiP (Picture-in-Picture) စနစ် အလုပ်လုပ်ပုံ
 pipBtn.addEventListener('click', async function() {
     try {
         if (document.pictureInPictureElement) {
-            // PiP ဖွင့်ထားရင် ပိတ်မယ်
             await document.exitPictureInPicture();
         } else {
-            // PiP မဖွင့်ထားရင် ဖွင့်မယ်
             await myPlayer.requestPictureInPicture();
         }
     } catch (error) {
-        alert("သင့်ဖုန်းရဲ့ Browser က PiP ကို မပံ့ပိုးထားပါဘူး။ (Chrome Browser ကို သုံးကြည့်ပါ)");
+        alert("သင့်ဖုန်းရဲ့ Browser က PiP ကို မပံ့ပိုးထားပါဘူး။");
     }
 });
 
-// Video ကို နှိပ်လိုက်ရင် Play/Pause ဖြစ်သွားအောင် လုပ်ခြင်း
 myPlayer.addEventListener('click', function() {
     if (myPlayer.paused) {
         myPlayer.play();
@@ -112,6 +135,8 @@ clearBtn.addEventListener('click', function() {
     videoURLs = [];
     currentVideoIndex = 0;
     videoFileInput.value = ''; 
+    subtitleFileInput.value = '';
+    videoSubtitle.src = ''; // စာတန်းထိုးကိုပါ ရှင်းလင်းမယ်
 });
 
 myPlayer.addEventListener('ended', function() {
