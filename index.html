@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     
-    <!-- PWA အတွက် -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#007bff">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2933/2933245.png">
@@ -23,6 +22,12 @@
         <button id="clearBtn">🗑️ စာရင်းရှင်းမယ်</button>
     </div>
 
+    <!-- စာတန်းထိုး တင်ဖို့ ခလုတ်အသစ် -->
+    <div class="controls" style="margin-top: 10px;">
+        <input type="file" id="subtitleFile" accept=".srt,.vtt">
+        <span style="font-size: 12px; color: #666; display: block; margin-top: 5px;">(စာတန်းထိုး .srt / .vtt ဖိုင် ရွေးပါ)</span>
+    </div>
+
     <div class="controls" style="margin-top: 10px;">
         အသံအမြန်နှုန်း: 
         <select id="speedControl">
@@ -33,11 +38,12 @@
         </select>
     </div>
 
-    <video id="myPlayer" width="100%" controls>
+    <!-- Video နဲ့ စာတန်းထိုး ပြမယ့်နေရာ -->
+    <video id="myPlayer" width="100%" controls crossorigin="anonymous">
+        <track kind="subtitles" id="videoSubtitle" label="Subtitle" srclang="mm" default>
         သင့်ဖုန်းက Browser က Video ကို မပံ့ပိုးနိုင်ပါဘူး။
     </video>
 
-    <!-- ခလုတ်အသစ်များ (PiP ခလုတ် အပါအဝင်) -->
     <div class="nav-controls">
         <button id="rewindBtn">⏪ 10s</button>
         <button id="prevBtn">⏮ နောက်ပြန်</button>
