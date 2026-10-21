@@ -10,13 +10,13 @@ const forwardBtn = document.getElementById('forwardBtn');
 const clearBtn = document.getElementById('clearBtn');
 const pipBtn = document.getElementById('pipBtn');
 const subtitleFileInput = document.getElementById('subtitleFile');
+const fullscreenBtn = document.getElementById('fullscreenBtn'); // အသစ်
 
 let videoURLs = []; 
-let videoFiles = []; // ဖိုင်အမည်တွေကို သိမ်းထားဖို့ အသစ်ထည့်ထားပါတယ်
+let videoFiles = [];
 let currentVideoIndex = 0; 
-let wakeLock = null; // မျက်နှာပြင် မလင်းစေတဲ့ စနစ်အတွက်
+let wakeLock = null; 
 
-// Video ရွေးတဲ့ ကုဒ်
 videoFileInput.addEventListener('change', function(event) {
     const files = event.target.files; 
     playlist.innerHTML = ''; 
@@ -28,7 +28,7 @@ videoFileInput.addEventListener('change', function(event) {
             const file = files[i];
             const fileURL = URL.createObjectURL(file);
             videoURLs.push(fileURL); 
-            videoFiles.push(file); // ဖိုင်အချက်အလက်ကို သိမ်းထားမယ်
+            videoFiles.push(file);
             
             const listItem = document.createElement('li');
             listItem.textContent = file.name;
@@ -43,7 +43,6 @@ videoFileInput.addEventListener('change', function(event) {
     }
 });
 
-// စာတန်းထိုး ဖိုင်ရွေးတဲ့ ကုဒ်
 subtitleFileInput.addEventListener('change', function(event) {
     const file = event.target.files[0];
     if (file) {
@@ -86,7 +85,6 @@ subtitleFileInput.addEventListener('change', function(event) {
     }
 });
 
-// 🔥 Wake Lock စနစ် (မျက်နှာပြင် မည်းမသွားစေဖို့) 🔥
 async function requestWakeLock() {
     try {
         if ('wakeLock' in navigator) {
@@ -97,26 +95,21 @@ async function requestWakeLock() {
     }
 }
 
-// 🔥 ဗီဒီယို ဖွင့်တဲ့ Function (Resume စနစ် ပါဝင်လာပါပြီ) 🔥
 function playVideoByIndex(index) {
     if (index >= 0 && index < videoURLs.length) {
         currentVideoIndex = index; 
         
-        // အရင်က ကြည့်ခဲ့တဲ့ အချိန်ကို ရှာမယ်
         const fileName = videoFiles[index].name;
         const savedTime = localStorage.getItem('time_' + fileName);
 
         myPlayer.src = videoURLs[index];
         myPlayer.playbackRate = speedControl.value; 
         
-        // အရင်က ကြည့်ခဲ့တဲ့ အချိန် ရှိရင် အဲဒီကနေ ဆက်ဖွင့်မယ်
         if (savedTime) {
             myPlayer.currentTime = parseFloat(savedTime);
         }
 
         myPlayer.play();
-
-        // မျက်နှာပြင် မလင်းစေတဲ့ စနစ်ကို ဖွင့်မယ်
         requestWakeLock();
 
         const allItems = playlist.querySelectorAll('li');
@@ -131,7 +124,21 @@ function playVideoByIndex(index) {
     }
 }
 
-// 🔥 ဗီဒီယို ရပ်သွားရင် အချိန်ကို သိမ်းထားမယ် 🔥
+// 🔥 Fullscreen ခလုတ် အလုပ်လုပ်ပုံ 🔥
+fullscreenBtn.addEventListener('click', function() {
+    if (!document.fullscreenElement) {
+        if (myPlayer.requestFullscreen) {
+            myPlayer.requestFullscreen();
+        } else if (myPlayer.webkitRequestFullscreen) { /* Safari အတွက် */
+            myPlayer.webkitRequestFullscreen();
+        }
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+    }
+});
+
 myPlayer.addEventListener('pause', function() {
     if (videoFiles.length > 0 && videoFiles[currentVideoIndex]) {
         const fileName = videoFiles[currentVideoIndex].name;
@@ -139,7 +146,6 @@ myPlayer.addEventListener('pause', function() {
     }
 });
 
-// ဗီဒီယို ပြီးသွားရင် အချိန်ကို ပြန်လည် သုညချမယ်
 myPlayer.addEventListener('ended', function() {
     if (videoFiles.length > 0 && videoFiles[currentVideoIndex]) {
         const fileName = videoFiles[currentVideoIndex].name;
@@ -198,7 +204,6 @@ forwardBtn.addEventListener('click', function() {
 clearBtn.addEventListener('click', function() {
     myPlayer.pause();
     
-    // ရှင်းလင်းတဲ့အခါ အချိန်တွေကိုပါ ဖျက်မယ်
     if (videoFiles.length > 0 && videoFiles[currentVideoIndex]) {
         const fileName = videoFiles[currentVideoIndex].name;
         localStorage.removeItem('time_' + fileName);
