@@ -10,12 +10,11 @@ const forwardBtn = document.getElementById('forwardBtn');
 const clearBtn = document.getElementById('clearBtn');
 const pipBtn = document.getElementById('pipBtn');
 const subtitleFileInput = document.getElementById('subtitleFile');
-const videoSubtitle = document.getElementById('videoSubtitle');
 
 let videoURLs = []; 
 let currentVideoIndex = 0; 
 
-// Video ရွေးတဲ့ ကုဒ် (အရင်အတိုင်း)
+// Video ရွေးတဲ့ ကုဒ်
 videoFileInput.addEventListener('change', function(event) {
     const files = event.target.files; 
     playlist.innerHTML = ''; 
@@ -40,7 +39,7 @@ videoFileInput.addEventListener('change', function(event) {
     }
 });
 
-// စာတန်းထိုး ဖိုင်ရွေးတဲ့ ကုဒ်
+// 🔥 စာတန်းထိုး ဖိုင်ရွေးတဲ့ ကုဒ်ကို အသစ်ပြန်ရေးထားပါတယ် 🔥
 subtitleFileInput.addEventListener('change', function(event) {
     const file = event.target.files[0];
     if (file) {
@@ -48,17 +47,41 @@ subtitleFileInput.addEventListener('change', function(event) {
         reader.onload = function(e) {
             let content = e.target.result;
             
-            // SRT ဖိုင်ကို VTT အဖြစ် ပြောင်းလဲခြင်း (Browser တွေက VTT ကိုပဲ ဖတ်နိုင်လို့ပါ)
-            if (file.name.endsWith('.srt')) {
-                content = content.replace(/\r/g, '').replace(/(\d{2}:\d{2}:\d{2}),(\d{3})/g, '$1.$2');
+            // BOM (မမြင်ရတဲ့ စာလုံးတွေ) ကို ရှင်းလင်းမယ်
+            if (content.charCodeAt(0) === 0xFEFF) {
+                content = content.slice(1);
+            }
+
+            // SRT ကို VTT အဖြစ် ပြောင်းလဲခြင်း
+            if (file.name.toLowerCase().endsWith('.srt')) {
+                content = content.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+                content = content.replace(/(\d{2}:\d{2}:\d{2}),(\d{3})/g, '$1.$2');
                 content = "WEBVTT\n\n" + content;
             }
 
             const blob = new Blob([content], { type: 'text/vtt' });
             const url = URL.createObjectURL(blob);
             
-            videoSubtitle.src = url;
-            videoSubtitle.track.mode = 'showing'; // စာတန်းထိုးကို အလိုအလျောက် ဖွင့်ပြမယ်
+            // အရင်က စာတန်းထိုး track ရှိရင် ဖျက်မယ်
+            const oldTracks = myPlayer.querySelectorAll('track');
+            oldTracks.forEach(t => t.remove());
+
+            // Track အသစ် ဆောက်ပြီး Video ထဲကို ထည့်မယ်
+            const newTrack = document.createElement('track');
+            newTrack.kind = 'subtitles';
+            newTrack.label = 'Subtitle';
+            newTrack.srclang = 'mm';
+            newTrack.src = url;
+            newTrack.default = true;
+            
+            myPlayer.appendChild(newTrack);
+            
+            // စာတန်းထိုးကို အလိုအလျောက် ဖွင့်ပြခိုင်းမယ်
+            setTimeout(() => {
+                if (myPlayer.textTracks.length > 0) {
+                    myPlayer.textTracks[0].mode = 'showing';
+                }
+            }, 100);
         };
         reader.readAsText(file);
     }
@@ -136,7 +159,6 @@ clearBtn.addEventListener('click', function() {
     currentVideoIndex = 0;
     videoFileInput.value = ''; 
     subtitleFileInput.value = '';
-    videoSubtitle.src = ''; // စာတန်းထိုးကိုပါ ရှင်းလင်းမယ်
 });
 
 myPlayer.addEventListener('ended', function() {
