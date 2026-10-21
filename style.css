@@ -1,0 +1,153 @@
+body {
+    font-family: sans-serif;
+    background-color: #f4f4f9;
+    text-align: center;
+    padding: 15px;
+    margin: 0;
+}
+
+h2 {
+    color: #333;
+    font-size: 20px;
+}
+
+.controls {
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 15px;
+    display: inline-block;
+}
+
+#clearBtn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+video {
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    max-width: 100%;
+    background-color: black;
+    margin-bottom: 10px;
+}
+
+/* ခလုတ်တွေ အတွက် Design */
+.nav-controls {
+    display: flex;
+    flex-wrap: wrap; /* နေရာမဆံ့ရင် အောက်ကို ဆင်းသွားစေရန် */
+    justify-content: center;
+    gap: 5px; /* ခလုတ်တွေ ကြားထဲက အကွာအဝေး */
+    margin-bottom: 20px;
+}
+
+.nav-controls button {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px; /* စာလုံးအရွယ်ကို နည်းနည်းလျှော့ထားတယ် */
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    flex: 1;
+    min-width: 70px;
+}
+
+.nav-controls button:hover {
+    background-color: #0056b3;
+}
+
+/* PiP ခလုတ်ကို အရောင်ခွဲခြားထားမယ် */
+#pipBtn {
+    background-color: #28a745;
+    flex-basis: 100%; /* PiP ခလုတ်ကို အောက်တစ်ကြောင်း တစ်ခုတည်း ထားမယ် */
+    margin-top: 5px;
+}
+#pipBtn:hover {
+    background-color: #218838;
+}
+
+.playlist-container {
+    background-color: white;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    text-align: left;
+}
+
+.playlist-container h3 {
+    margin-top: 0;
+    color: #444;
+    font-size: 16px;
+}
+
+#playlist {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#playlist li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    transition: background 0.2s;
+}
+
+#playlist li:hover {
+    background-color: #f0f0f0;
+}
+
+#playlist li.active {
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    border-bottom: none;
+}
+
+/* --- Dark Mode အတွက် Design --- */
+body.dark-mode {
+    background-color: #121212;
+    color: white;
+}
+
+body.dark-mode h2, body.dark-mode .controls {
+    color: white;
+}
+
+body.dark-mode .controls, body.dark-mode .playlist-container {
+    background-color: #1e1e1e;
+    box-shadow: 0 2px 5px rgba(255,255,255,0.1);
+}
+
+body.dark-mode #playlist li {
+    color: #ddd;
+    border-bottom: 1px solid #333;
+}
+
+body.dark-mode #playlist li:hover {
+    background-color: #333;
+}
+
+body.dark-mode #themeToggle {
+    background: #ddd;
+    color: black;
+}
+
+body.dark-mode .nav-controls button {
+    background-color: #444;
+}
+body.dark-mode .nav-controls button:hover {
+    background-color: #666;
+}
