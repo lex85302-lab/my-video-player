@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Video Player</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- PWA အတွက် -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#007bff">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2933/2933245.png">
+</head>
+<body>
+
+    <div style="text-align: right; padding-right: 15px; margin-bottom: 10px;">
+        <button id="themeToggle" style="padding: 8px 15px; border-radius: 20px; border: none; background: #333; color: white; cursor: pointer;">🌙 Dark Mode</button>
+    </div>
+
+    <h2>ကျွန်တော့် ကိုယ်ပိုင် Video Player</h2>
+    
+    <div class="controls">
+        <input type="file" id="videoFile" accept="video/*" multiple>
+        <button id="clearBtn">🗑️ စာရင်းရှင်းမယ်</button>
+    </div>
+
+    <div class="controls" style="margin-top: 10px;">
+        အသံအမြန်နှုန်း: 
+        <select id="speedControl">
+            <option value="0.5">0.5x</option>
+            <option value="1" selected>1x (Normal)</option>
+            <option value="1.5">1.5x</option>
+            <option value="2">2x</option>
+        </select>
+    </div>
+
+    <video id="myPlayer" width="100%" controls>
+        သင့်ဖုန်းက Browser က Video ကို မပံ့ပိုးနိုင်ပါဘူး။
+    </video>
+
+    <!-- ခလုတ်အသစ်များ (PiP ခလုတ် အပါအဝင်) -->
+    <div class="nav-controls">
+        <button id="rewindBtn">⏪ 10s</button>
+        <button id="prevBtn">⏮ နောက်ပြန်</button>
+        <button id="nextBtn">ရှေ့သွား ⏭</button>
+        <button id="forwardBtn">10s ⏩</button>
+        <button id="pipBtn">🪟 PiP</button>
+    </div>
+
+    <div class="playlist-container">
+        <h3>Video စာရင်း</h3>
+        <ul id="playlist"></ul>
+    </div>
+
+    <script src="app.js"></script>
+    
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+            .then(function() { console.log('Service Worker Registered'); });
+        }
+    </script>
+</body>
+</html>
