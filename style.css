@@ -47,7 +47,7 @@ body {
     height: 100dvh;
     display: flex;
     flex-direction: column;
-    touch-action: none; /* For smooth gestures */
+    touch-action: none;
 }
 
 /* Header */
@@ -222,7 +222,7 @@ header {
     transition: transform 0.3s ease-out;
     display: flex;
     flex-direction: column;
-    touch-action: pan-y; /* allow scrolling in modal */
+    touch-action: pan-y;
 }
 
 .modal.hidden .modal-content {
@@ -242,6 +242,26 @@ header {
     font-size: 1.3rem;
     color: var(--text-main);
     cursor: pointer;
+}
+
+/* Search Bar (အသစ်) */
+.search-container {
+    margin-bottom: 15px;
+}
+
+#searchInput {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 10px;
+    background: var(--bg-input);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    font-size: 1rem;
+    outline: none;
+}
+
+#searchInput:focus {
+    border-color: var(--primary);
 }
 
 /* Library */
@@ -370,4 +390,4 @@ input[type="color"] {
     border: none;
     background: none;
     cursor: pointer;
-}
+    }
