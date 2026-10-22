@@ -12,6 +12,7 @@ const playlistEl = document.getElementById('playlist');
 const folderSelect = document.getElementById('folderSelect');
 const libraryModal = document.getElementById('libraryModal');
 const settingsModal = document.getElementById('settingsModal');
+const searchInput = document.getElementById('searchInput'); // Search Bar အသစ်
 
 // === State ===
 let videos = [];
@@ -165,7 +166,13 @@ function renderFolders() {
 
 function renderPlaylist() {
     playlistEl.innerHTML = '';
-    const filtered = videos.filter(v => v.folderId === currentFolderId);
+    const query = searchInput.value.toLowerCase(); // Search စာသားယူမယ်
+    
+    // Folder နဲ့ Search ၂ ခုလုံးနဲ့ ကိုက်ညီတာကို စစ်ထုတ်မယ်
+    const filtered = videos.filter(v => 
+        v.folderId === currentFolderId && 
+        v.name.toLowerCase().includes(query)
+    );
     
     filtered.forEach(v => {
         const li = document.createElement('li');
@@ -411,6 +418,7 @@ lockOverlay.addEventListener('click', () => {
 
 // === Modals ===
 document.getElementById('openLibraryBtn').addEventListener('click', () => {
+    searchInput.value = ''; // Library ဖွင့်တိုင်း Search ကို ရှင်းမယ်
     libraryModal.classList.remove('hidden');
     renderFolders();
     renderPlaylist();
@@ -426,6 +434,9 @@ document.querySelectorAll('.close-modal-btn').forEach(btn => {
     });
 });
 
+// Search Bar Event
+searchInput.addEventListener('input', renderPlaylist);
+
 // === Folder Management ===
 document.getElementById('addFolderBtn').addEventListener('click', () => {
     const name = prompt("Enter new folder name:");
@@ -436,12 +447,14 @@ document.getElementById('addFolderBtn').addEventListener('click', () => {
         renderFolders();
         folderSelect.value = newFolder.id;
         currentFolderId = newFolder.id;
+        searchInput.value = ''; // Folder အသစ်ဖွင့်ရင် Search ရှင်းမယ်
         renderPlaylist();
     }
 });
 
 folderSelect.addEventListener('change', (e) => {
     currentFolderId = e.target.value;
+    searchInput.value = ''; // Folder ပြောင်းရင် Search ရှင်းမယ်
     renderPlaylist();
 });
 
@@ -623,4 +636,4 @@ async function requestWakeLock() {
     } catch (err) {
         console.log('Wake Lock error:', err);
     }
-                                               }
+                     }
