@@ -637,3 +637,75 @@ async function requestWakeLock() {
         console.log('Wake Lock error:', err);
     }
                      }
+// === Folder Management Logic (For existing UI) ===
+
+// Local Storage ကနေ Folder တွေကို ယူမယ်၊ မရှိသေးရင် Default Folder ပဲ ထည့်ထားမယ်
+let userFolders = JSON.parse(localStorage.getItem('userFolders')) || [
+    { id: 'default', name: 'Default Folder', videos: [] }
+];
+
+// Folder Dropdown ကို Update လုပ်တဲ့ Function
+function updateFolderDropdown() {
+    const select = document.getElementById('folderSelect'); // အကို့ HTML က select ID ကို ထည့်ပါ
+    if (!select) return;
+
+    // လက်ရှိ ရွေးထားတဲ့ Folder ကို မှတ်ထားမယ်
+    const currentSelected = select.value; 
+    
+    // အဟောင်းတွေ ရှင်းမယ်
+    select.innerHTML = ""; 
+
+    // Folder တွေ အကုန် ပြန်ထည့်မယ်
+    userFolders.forEach(folder => {
+        const option = document.createElement('option');
+        option.value = folder.id;
+        option.textContent = folder.name;
+        select.appendChild(option);
+    });
+
+    // အရင် ရွေးထားတာ ရှိသေးရင် အဲဒါပဲ ပြန်ရွေးထားမယ်
+    if (currentSelected) {
+        select.value = currentSelected;
+    }
+}
+
+// Folder အသစ် ဖန်တီးတဲ့ Function
+function createFolder() {
+    const folderName = prompt("Folder အသစ် နာမည် ထည့်ပါ:");
+    
+    if (!folderName || folderName.trim() === "") {
+        return; // နာမည် မထည့်ရင် ဘာမှ မလုပ်ဘူး
+    }
+
+    // နာမည် တူနေလား စစ်မယ်
+    const isExist = userFolders.some(f => f.name.toLowerCase() === folderName.toLowerCase());
+    if (isExist) {
+        alert("ဒီနာမည်နဲ့ Folder ရှိပြီးသားပါ။");
+        return;
+    }
+
+    // Folder အသစ် Object ဆောက်မယ်
+    const newFolder = {
+        id: 'folder_' + Date.now(), // သီးသန့် ID
+        name: folderName,
+        videos: [] // ဗီဒီယိုတွေ ထည့်ဖို့ နေရာလွတ်
+    };
+
+    userFolders.push(newFolder);
+    localStorage.setItem('userFolders', JSON.stringify(userFolders));
+    
+    updateFolderDropdown(); // Dropdown မှာ ချက်ချင်း ပေါ်လာအောင် လုပ်မယ်
+    alert(`"${folderName}" Folder ဖန်တီးပြီးပါပြီ။`);
+}
+
+// Button တွေကို ချိတ်ဆက်ခြင်း (Event Listeners)
+document.addEventListener('DOMContentLoaded', () => {
+    // စဖွင့်ဖွင့်ချင်း Dropdown မှာ Folder တွေ ပေါ်အောင်
+    updateFolderDropdown();
+
+    // "+ Folder" ခလုတ်ကို နှိပ်ရင် createFolder အလုပ်လုပ်အောင်
+    const addFolderBtn = document.getElementById('addFolderBtn'); // အကို့ HTML က button ID
+    if (addFolderBtn) {
+        addFolderBtn.addEventListener('click', createFolder);
+    }
+});
