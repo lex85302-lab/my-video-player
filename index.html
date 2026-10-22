@@ -13,8 +13,8 @@
     <header id="mainHeader">
         <div class="header-title">My Player</div>
         <div class="header-actions">
-            <button id="openLibraryBtn" title="Library">📁</button>
-            <button id="openSettingsBtn" title="Settings">⚙️</button>
+            <button id="openLibraryBtn" title="Library"></button>
+            <button id="openSettingsBtn" title="Settings"></button>
         </div>
     </header>
 
@@ -24,7 +24,7 @@
         
         <!-- Lock Icon Overlay -->
         <div id="lockOverlay" class="hidden">
-            <span>🔒 Screen Locked<br><small>Tap to unlock</small></span>
+            <span> Screen Locked<br><small>Tap to unlock</small></span>
         </div>
 
         <!-- Player Controls Overlay -->
@@ -32,16 +32,16 @@
             <!-- Top Bar -->
             <div class="controls-top">
                 <span id="currentVideoTitle">No Video Selected</span>
-                <button id="lockBtn">🔓</button>
+                <button id="lockBtn"></button>
             </div>
 
             <!-- Center Bar -->
             <div class="controls-center">
-                <button id="prevBtn" class="control-btn">⏮</button>
-                <button id="rewindBtn" class="control-btn">🔙 10s</button>
-                <button id="playPauseBtn" class="control-btn play-btn">▶️</button>
-                <button id="forwardBtn" class="control-btn">10s 🔜</button>
-                <button id="nextBtn" class="control-btn">⏭</button>
+                <button id="prevBtn" class="control-btn"></button>
+                <button id="rewindBtn" class="control-btn"> 10s</button>
+                <button id="playPauseBtn" class="control-btn play-btn"></button>
+                <button id="forwardBtn" class="control-btn">10s </button>
+                <button id="nextBtn" class="control-btn"></button>
             </div>
 
             <!-- Bottom Bar -->
@@ -49,7 +49,7 @@
                 <span id="currentTime">00:00</span>
                 <input type="range" id="seekBar" value="0" min="0" max="100">
                 <span id="duration">00:00</span>
-                <button id="fullscreenBtn" class="control-btn">⛶</button>
+                <button id="fullscreenBtn" class="control-btn"></button>
             </div>
         </div>
     </div>
@@ -58,10 +58,15 @@
     <div id="libraryModal" class="modal hidden">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>📚 Library</h3>
-                <button class="close-modal-btn" data-target="libraryModal">✖</button>
+                <h3> Library</h3>
+                <button class="close-modal-btn" data-target="libraryModal"></button>
             </div>
             
+            <!-- Search Bar အသစ် -->
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder=" Search videos by name...">
+            </div>
+
             <div class="library-controls">
                 <select id="folderSelect"></select>
                 <button id="addFolderBtn" class="primary-btn">+ Folder</button>
@@ -69,7 +74,7 @@
             
             <ul id="playlist" class="playlist"></ul>
             
-            <button id="selectVideoBtn" class="primary-btn wide-btn">📂 Select Video</button>
+            <button id="selectVideoBtn" class="primary-btn wide-btn"> Select Video</button>
         </div>
     </div>
 
@@ -77,8 +82,8 @@
     <div id="settingsModal" class="modal hidden">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>⚙️ Settings</h3>
-                <button class="close-modal-btn" data-target="settingsModal">✖</button>
+                <h3> Settings</h3>
+                <button class="close-modal-btn" data-target="settingsModal"></button>
             </div>
 
             <!-- Appearance Settings -->
@@ -131,7 +136,7 @@
             <div class="setting-section">
                 <h4>Subtitles</h4>
                 <div class="setting-row">
-                    <button id="loadSubtitleBtn" class="primary-btn">📥 Load Subtitle (.srt/.vtt)</button>
+                    <button id="loadSubtitleBtn" class="primary-btn"> Load Subtitle (.srt/.vtt)</button>
                 </div>
                 <div class="setting-row">
                     <label>Size</label>
@@ -151,10 +156,10 @@
             <div class="setting-section">
                 <h4>Utilities</h4>
                 <div class="setting-row">
-                    <button id="pipBtn" class="primary-btn">🎬 PiP Mode</button>
+                    <button id="pipBtn" class="primary-btn"> PiP Mode</button>
                 </div>
                 <div class="setting-row">
-                    <button id="clearHistoryBtn" class="danger-btn">🗑 Clear History</button>
+                    <button id="clearHistoryBtn" class="danger-btn"> Clear History</button>
                 </div>
             </div>
         </div>
